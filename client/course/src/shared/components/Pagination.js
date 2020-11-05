@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const Pagination = (props) => {
     const { pageNumbers, changePageNumber, pageSelected } = props;
+
     const pageNumberSelected = pageSelected || 1;
 
     const lstpageNumber = pageNumbers || [1, 2, 3, 4, 5, 6, 7];
@@ -11,16 +12,13 @@ const Pagination = (props) => {
     }
 
     const handleNextPage = () => {
-        debugger;
         if (pageNumberSelected < Math.max(...lstpageNumber)) {
-            let nextPageNumber = pageNumberSelected + 1;
-            handleSelectedPageNumber(nextPageNumber);
+            handleSelectedPageNumber(pageNumberSelected + 1);
         }
     }
     const handlePreviousPage = () => {
         if (pageNumberSelected > 1) {
-            let previousPageNumber = pageNumberSelected - 1;
-            handleSelectedPageNumber(previousPageNumber);
+            handleSelectedPageNumber(pageNumberSelected - 1);
         }
     }
 

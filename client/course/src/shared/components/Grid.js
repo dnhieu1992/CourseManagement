@@ -4,9 +4,24 @@ import PagesizeSelect from './PagesizeSelect';
 import Pagination from './Pagination';
 
 import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import '../../administrators/layout/admin.css';
 
 const Grid = (props) => {
-    const { columns, data, handleSort, classNames, pageSizes, changePageSize, changePageNumber, pageSelected } = props;
+
+    const {
+        columns,
+        data,
+        handleSort,
+        classNames,
+        pageSizes,
+        totals,
+        skip,
+        changePageSize,
+        changePageNumber,
+        pageSelected,
+        pageSizeSelected,
+        onSelectRow
+    } = props;
 
     const [sortColumn, setSortColumn] = useState({});
 
@@ -33,7 +48,6 @@ const Grid = (props) => {
         setSortColumn({ name: column.name, sort: sortOperation });
     }
 
-
     const headerColumnRender = columns.map((column, index) => {
         const classNames = classRender(column);
         return (
@@ -52,45 +66,42 @@ const Grid = (props) => {
     });
 
     return (
-        <div className="card">
-            <div className="card-header">
-                <h3 className="card-title">DataTable with default features</h3>
-            </div>
-            <div className="card-body">
-                <div id="example1_wrapper" className="dataTables_wrapper dt-bootstrap4">
-                    <div className="row">
-                        <div className="col-sm-12 col-md-6">
-                            <PagesizeSelect pageSizes={pageSizes} changePageSize={changePageSize} />
-                        </div>
+        <div className="card-body">
+            <div id="example1_wrapper" className="dataTables_wrapper dt-bootstrap4">
+                <div className="row">
+                    <div className="col-sm-12 col-md-6">
+                        <PagesizeSelect pageSizes={pageSizes}
+                            changePageSize={changePageSize}
+                            pageSizeSelected={pageSizeSelected} />
                     </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <table id="example1" className="table table-bordered table-striped dataTable dtr-inline" role="grid" aria-describedby="example1_info">
-                                <thead>
-                                    <tr role="row">
-                                        {headerColumnRender}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <GridRow columns={columns} data={data} />
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <table id="example1" className="table table-bordered table-striped dataTable dtr-inline" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+                                    {headerColumnRender}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <GridRow onSelectRow={onSelectRow} columns={columns} data={data} />
+                            </tbody>
+                        </table>
                     </div>
-                    <div className="row">
-                        <div className="col-sm-12 col-md-5">
-                            <div className="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
-                        </div>
-                        <div className="col-sm-12 col-md-7">
-                            <Pagination changePageNumber={changePageNumber}
-                                pageSelected={pageSelected} />
-                        </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-12 col-md-5">
+                        <div className="dataTables_info" id="example1_info" role="status" aria-live="polite">
+                            Showing {skip ? parseInt(skip) + 1 : 1} to {(skip && pageSizeSelected) ? (parseInt(skip) + parseInt(pageSizeSelected)) : 10} of {totals} entries
+                            </div>
+                    </div>
+                    <div className="col-sm-12 col-md-7">
+                        <Pagination changePageNumber={changePageNumber}
+                            pageSelected={pageSelected} />
                     </div>
                 </div>
             </div>
         </div>
-
-
     )
 };
 export default Grid;
